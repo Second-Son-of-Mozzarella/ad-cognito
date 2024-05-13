@@ -1,0 +1,8 @@
+{
+  "name": "ad-cognito",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite",
+  "id": "117953e9"
+}
