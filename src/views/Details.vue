@@ -20,30 +20,33 @@
 
                         <ion-card-content class="q-pt-none">
                             <ion-list>
-                              <ion-item>
-                                  <ion-label>Length: </ion-label>
-                                  <ion-badge slot="end">{{ booksData.length }}</ion-badge>
-                              </ion-item>
                                 <ion-item>
-                                Language: {{ booksData.language }}
-                                 </ion-item>
-                                 <ion-item>
+                                    <ion-label>Length: </ion-label>
+                                    <ion-badge slot="end">{{ booksData.length }}</ion-badge>
+                                </ion-item>
+                                <ion-item>
+                                    Language: {{ booksData.language }}
+                                </ion-item>
+                                <ion-item>
                                     Type: {{ booksData.type }}
-                                 </ion-item>
-                                 <ion-item>
+                                </ion-item>
+                                <!-- <ion-item>
                                     <ion-label> Pages Read: </ion-label>
                                     <ion-badge slot="end"> {{ booksData.pagesRead }}</ion-badge>
-                                 </ion-item>
+                                 </ion-item> -->
+                                <!-- <ion-item>
+                                        <ion-textarea :readonly="true" label="Description"> {{ booksData.description }}</ion-textarea>
+                                 </ion-item> -->
                             </ion-list>
-                          </ion-card-content>
+                        </ion-card-content>
                     </ion-card>
                 </ion-col>
             </ion-row>
             <ion-row>
                 <ion-col class="ion-text-center">
-                    <ion-button fill="clear">
-                        <ion-icon aria-hidden="true" :icon="pencil" />
-                        <ion-label>Edit Details</ion-label>
+                    <ion-button fill="clear" @click="loanOut(booksData)">
+                        <ion-icon aria-hidden="true" :icon="paperPlane" />
+                        <ion-label> Loan Out</ion-label>
                     </ion-button>
                 </ion-col>
             </ion-row>
@@ -63,20 +66,20 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCol, IonInput, IonRow, IonImg, IonButton, IonRouter, IonCard } from '@ionic/vue';
-import { pencil, trashBin } from 'ionicons/icons';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCol, IonInput, IonRow, IonButton } from '@ionic/vue';
+import { paperPlane, trashBin } from 'ionicons/icons';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import firebaseService from '../firebase-service';
 export default defineComponent({
     data() {
-        return { booksData: {} }
+        return { booksData: {}, title: '', author: '', length: 0, pagesRead: 0, timePeriod: '', type: '', language: '' }
     },
     props: ['id'],
     name: 'UpdateDetails',
     setup() {
         const router = useRouter();
-        return { router, trashBin, pencil };
+        return { router, trashBin, paperPlane };
     },
     created() {
         firebaseService().findIdForDoc('Library', this.id).then((book) => {
@@ -92,7 +95,6 @@ export default defineComponent({
         IonButton,
         IonRow,
         IonCol,
-        IonInput
     },
     methods: {
         async updateOperation() {
@@ -101,7 +103,27 @@ export default defineComponent({
             console.log(updated);
             this.router.push('/tab2');
         },
-        
+        async loanOut(item: any) {
+            const bookObject = {
+                title: item.title,
+                author: item.author,
+                length: item.length,
+                pagesRead: item.pagesRead,
+                timePeriod: item.timePeriod,
+                type: item.type,
+                language: item.language
+
+            }
+            console.log(bookObject);
+            const bookData = await firebaseService().createOperation('Loaned', bookObject);
+            console.log(bookData);
+            firebaseService().deleteOperation('Library', item.title);
+                console.log("deleted");
+                this.router.push('/tab2');
+
+            
+        },
+
     }
 });
 </script>

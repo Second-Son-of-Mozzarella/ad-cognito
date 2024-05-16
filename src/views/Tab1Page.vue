@@ -26,31 +26,36 @@
             padding-horizontal></ion-input>
         </ion-col>
       </ion-row>
-      <ion-row>
+      <!-- <ion-row>
         <ion-col>
           <ion-input type="number" v-model="pagesRead" placeholder="Enter pages read" class="input"
             padding-horizontal></ion-input>
         </ion-col>
-      </ion-row>
+      </ion-row> -->
       <ion-row>
         <ion-col>
-            <ion-select
+          <ion-input type="text" v-model="type" placeholder="Enter Type" class="input"
+            padding-horizontal></ion-input>
+          
+            <!-- <ion-select
             aria-label="type"
             placeholder="Enter type"
             v-model="type"
           >
             <ion-select-option v-for="type in types" :key="type" :value="type">{{ type }}</ion-select-option>
-          </ion-select>
+          </ion-select> -->
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col>
-            <ion-select 
+          <ion-input type="text" v-model="language" placeholder="Enter language" class="input"
+            padding-horizontal></ion-input>
+            <!-- <ion-select 
             v-model="language"
             aria-label="Language"
             placeholder="Enter language">
-              <ion-select-option v-for="language in languages" :key="language" :value="language">{{ language }}</ion-select-option>
-            </ion-select>
+              <ion-select-option v-for="languageItem in languages" :key="languageItem" :value="languageItem">{{ languageItem }}</ion-select-option>
+            </ion-select> -->
         </ion-col>
       </ion-row>
 
@@ -164,7 +169,7 @@ export default defineComponent({
       this.language = '';
     },
     getOperation() {
-      this.router.push('/read');
+      this.router.push('/tab2');
     }
   }
 });
